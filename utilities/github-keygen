@@ -1,0 +1,24 @@
+#!/bin/bash
+#create the key
+echo -e "\n\n\n" | ssh-keygen -t rsa &> /dev/null
+if [ $? -eq 1 ]; then
+    echo "Key already exists"
+fi
+
+#copy to clipboard if possible
+if type clip &> /dev/null; then
+    clip < ~/.ssh/id_rsa.pub
+elif type xclip &> /dev/null; then
+    xclip -sel clip < ~/.ssh/id_rsa.pub
+else
+    could_copy_to_clipboard=false
+fi
+
+#print message based on whether or not could copy to clipboard
+if $could_copy_to_clipboard; then
+    echo "Public key copied to clipboard."
+else
+    cat ~/.ssh/id_rsa.pub
+fi
+
+
