@@ -1,0 +1,56 @@
+#
+# Ryan Morton's bashrc stuff
+# b/c he was sick of fussing with the .bashrc file when upgrading ubuntu
+# Thus name this something like .mybashrc and put the following in your .bashrc
+# if [ -f ~/.mybashrc ]; then
+#     . ~/.mybashrc
+# fi
+
+# SHELL PROMPT
+clear
+function parse_git_dirty {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]]
+}
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+}
+function parse_git_branch_original {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+}
+#export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w\[\033[31m\] $(parse_git_branch)\[\033[01;34m\]$\[\033[00m\]\n'
+
+export PS1='\[\033[01;32m\]\u \w\[\033[31m\] $(parse_git_branch)\[\033[01;34m\]$\[\033[00m\] '
+
+#PATH
+export PATH=$PATH:.
+export PATH=$PATH:~/config/utilities/
+
+# ALIASES
+alias c='clear'
+alias ll='ls -l'
+alias lla='ls -al'
+alias sl='ls'
+alias md=mkdir
+alias rd=rmdir
+alias cls=clear
+alias gitk='gitk --all &'
+alias 'cd..'='cd ..'
+alias gitup='git remote update'
+alias gitst='git status'
+alias gd='git diff --color'
+alias grep="grep -n --color=auto -I"
+
+alias m="make"
+alias mc="make clean"
+alias mcm="make clean; make"
+alias aca="ant clean; ant"
+alias c="clear"
+
+#git aliases
+alias gpush='git push origin master'
+alias gpull='git pull origin master'
+alias gc='git commit -am'
+
+
+shopt -s cdspell
+
