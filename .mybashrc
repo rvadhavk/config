@@ -8,7 +8,7 @@
 
 # SHELL PROMPT
 cd ~/config
-git pull origin master &> /dev/null
+git pull origin master &> /dev/null &
 cd ~
 
 clear
