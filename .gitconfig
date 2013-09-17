@@ -1,0 +1,6 @@
+[user]
+    name = Rajeev Vadhavkar
+    email = jeeves@example.com
+
+[core]
+    editor = vim
