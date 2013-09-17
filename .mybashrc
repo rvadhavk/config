@@ -55,6 +55,9 @@ alias gpush='git push origin master'
 alias gpull='git pull origin master'
 alias gc='git commit -am'
 
+#utility aliases
+alias src='source ~/.bashrc'
+
 
 shopt -s cdspell
 
