@@ -1,0 +1,24 @@
+#!/bin/bash
+#in config/utilities
+script_directory=`dirname "$0"`
+
+#save current directory
+starting_directory=$PWD
+
+#cd to config
+cd $script_directory/..
+
+#pull latest changes and apply them
+echo Synchronizing config
+git pull origin master
+if [ $? -ne 0 ]; then
+    echo ...Pull failed
+fi
+echo Running setup
+./setup
+
+#cd back to starting directory
+cd $starting_directory
+
+
+

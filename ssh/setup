@@ -1,2 +1,7 @@
 #!/bin/bash
-ln -s ~/config/ssh/config ~/.ssh/config
+script_directory=`dirname "$0"`
+
+for filename in config; do
+    symlink $script_directory/$filename ~/.ssh/config
+done
+

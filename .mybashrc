@@ -7,9 +7,6 @@
 # fi
 
 # SHELL PROMPT
-cd ~/config
-git pull origin master &> /dev/null &
-cd ~
 
 clear
 function parse_git_dirty {
@@ -61,3 +58,4 @@ alias src='source ~/.bashrc'
 
 shopt -s cdspell
 
+~/config/utilities/synchronize_config 

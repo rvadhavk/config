@@ -1,0 +1,34 @@
+#!/bin/bash
+#error checking
+#check number of arguments = 2
+expected_arguments=2
+if [ $# -ne $expected_arguments ]; then
+    echo "Usage: symlink [TARGET] [LINKNAME]"
+    exit 1
+fi
+#make sure that the source file exists
+if [ ! -f $1 ]; then
+    echo Source $1 does not exist
+    exit 1
+fi
+#make sure the destination file either does not exist or is a symlink
+if [ -f $2 -a ! -h $2 ]; then
+    echo Destination $2 is a real file that already exists.
+    echo Delete that file before symlinking.
+    exit 1
+fi
+
+#get the source absolute path
+source_path=`readlink -e $1`
+#remove existing symlink if it exists
+rm -f $2
+#create a new file so that readlink not error out
+touch $2
+new_link_path=`readlink -e $2`
+#remove the new file so the symlink can be created
+rm -f $2
+#create the symlink
+ln -s $source_path $new_link_path
+
+exit 0
+

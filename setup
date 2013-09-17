@@ -1,12 +1,11 @@
 #!/bin/bash
 #all dotfiles that go in ~
-for dotfile in .*; do
+script_directory=`dirname "$0"`
+for dotfile in $script_directory/.*; do
     if [ -f $dotfile ]; then
-        if [ -f ~/$dotfile ]; then
-            rm -f ~/$dotfile
-        fi
-        ln -s $PWD/$dotfile ~/$dotfile
+        symlink $dotfile ~/$dotfile
     fi
 done
 
-./ssh/setup
+#ssh
+./$script_directory/ssh/setup
