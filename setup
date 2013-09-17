@@ -1,3 +1,12 @@
 #!/bin/bash
-./copyfiles
-echo ". ~/.mybashrc" >> ~/.bashrc
+#all dotfiles that go in ~
+for dotfile in .*; do
+    if [ -f $dotfile ]; then
+        if [ -f ~/$dotfile ]; then
+            rm -f ~/$dotfile
+        fi
+        ln -s $PWD/$dotfile ~/$dotfile
+    fi
+done
+
+./ssh/setup

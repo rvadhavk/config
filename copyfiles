@@ -1,5 +1,0 @@
-#!/bin/bash
-cp ssh/config ~/.ssh/config
-for dotfile in .*; do
-    cp $dotfile ~/$dotfile
-done
