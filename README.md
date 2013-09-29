@@ -12,9 +12,11 @@ All dotfiles are stored in the *config* directory (the root directory of this re
 
 Setting up for the first time
 -----------------------------
-1. Go to your home directory
-1. Clone this repo
-1. Change the files listed in the section "Files Which Require Personalization"
+1. Go to your home directory.
+1. Clone this repo.
+1. Change the files listed in the section "Files Which Require Personalization".
+1. Move all of the dotfiles from your home directory to the repo's root directory.
+1. Move you ~/.ssh/config file to ssh/config in the repo if you have an ssh config file.
 1. Replace the dotfiles in the *config* directory with your own dotfiles if desired.
 1. Run first_time_setup
 
