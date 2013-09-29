@@ -2,6 +2,7 @@
 script_directory=`dirname "$0"`
 
 #load mybashrc commands for the first time
+echo "Adding . ~/.mybashrc to you ~/.bashrc"
 echo -e "\n#non machine-specific settings\n. ~/.mybashrc" >> ~/.bashrc
 cp $script_directory/.mybashrc ~/.mybashrc
 source ~/.bashrc
