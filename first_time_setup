@@ -1,0 +1,7 @@
+#!/bin/bash
+script_directory=`dirname "$0"`
+echo -e "\n#non machine-specific settings\n. ~/.mybashrc" >> ~/.bashrc
+cp $script_directory/.mybashrc ~/.mybashrc
+source ~/.bashrc
+rm ~/.mybashrc
+./$script_directory/setup
