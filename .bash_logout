@@ -1,6 +1,10 @@
 #add commit and push any changes to ~/config repo
-cd ~/config
-git add -A
-git commit -am "automatic commit"
-git push origin master
 
+function push_config_changes_to_github {
+    cd ~/config
+    git add -A
+    git commit -am "automatic commit"
+    git push origin master
+}
+
+push_config_changes_to_github &
