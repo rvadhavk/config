@@ -1,7 +1,24 @@
 #!/bin/bash
 script_directory=`dirname "$0"`
+
+#load mybashrc commands for the first time
 echo -e "\n#non machine-specific settings\n. ~/.mybashrc" >> ~/.bashrc
 cp $script_directory/.mybashrc ~/.mybashrc
 source ~/.bashrc
 rm ~/.mybashrc
+
+#run setup
 ./$script_directory/setup
+
+#create github keygen if there isn't one
+echo "Creating a public/private key pair if you don't already have one."
+echo "Add this you your github keys:"
+github-keygen
+
+#change the git origin so it uses ssh instead of https
+echo "Changing config repo's origin to ssh instead of https"
+cd $script_directory
+git remote rm origin
+git remote add origin git@github.com:rvadhavk/config
+
+
