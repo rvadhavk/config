@@ -3,7 +3,7 @@
 script_directory=`dirname "$0"`
 for dotfile in $script_directory/.*; do
     if [ -f $dotfile ]; then
-        symlink $dotfile ~/$dotfile
+        symlink $dotfile ~/$(basename $dotfile)
     fi
 done
 
