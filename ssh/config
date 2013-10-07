@@ -14,3 +14,6 @@ Host github
     Hostname github.com
     User git
 
+Host bitbucket
+    Hostname bitbucket.org
+    User git
