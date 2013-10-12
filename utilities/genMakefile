@@ -3,6 +3,11 @@ use strict;
 use warnings;
 
 my @cppFiles = glob("*.cpp");
+my $numberOfCppFiles = @cppFiles;
+if (!$numberOfCppFiles) {
+	print "Error: no cpp files\n";
+	exit 1;
+}
 my %dependencies = ();
 foreach (@cppFiles) {
     $dependencies{$_} = ();
@@ -69,3 +74,5 @@ clean:
 END
 
 print $makefile $cleanRule;
+
+exit 0
