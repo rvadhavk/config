@@ -1,0 +1,71 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my @cppFiles = glob("*.cpp");
+my %dependencies = ();
+foreach (@cppFiles) {
+    $dependencies{$_} = ();
+}
+
+foreach my $cppFile (keys %dependencies) {
+    open(my $fh, "<", $cppFile);
+    foreach my $line (<$fh>) {
+        chomp($line);
+        if ($line =~ /#include "(.+)"/) {
+            push(@{$dependencies{$cppFile}}, $1);
+        }
+    }
+}
+
+open(my $makefile, ">Makefile");
+# generate common makefile stuff    
+my @objectFiles = ();
+
+foreach (@cppFiles) {
+    /(.*)\.cpp/;
+    push(@objectFiles, $1 . ".o");
+}
+my $objectList = join(' ', @objectFiles);
+my $makefileStart = <<END;
+CC = g++
+
+#Recommended compiler and linker flags
+
+CFLAGS = -c -pedantic -std=c++11 -Wall -Werror -Wextra -g
+LFLAGS = -pedantic -Wall -Wextra -Werror 
+OBJS = $objectList
+PROG = exe
+
+#Prevents automatic build rules, which can lead to unexpected behavior.
+
+default:
+	make real -r -R
+
+real: \$(PROG)
+
+\$(PROG): \$(OBJS)
+
+END
+print $makefile $makefileStart;
+
+# add build rule for each object file
+foreach my $cppFile (keys %dependencies) {
+    my @headerFiles = @{$dependencies{$cppFile}};
+    $cppFile =~ /(.*)\.cpp/;
+    my $objectFile = $1. ".o";
+    my $headerFileList = join(" ", @headerFiles);
+    my $buildRule = <<END;
+$objectFile: $cppFile $headerFileList
+\t\$(CC) \$(CFLAGS) $cppFile
+        
+END
+    print $makefile $buildRule;
+}
+
+my $cleanRule = <<END;
+clean:
+\trm -rf exe *.o
+END
+
+print $makefile $cleanRule;
