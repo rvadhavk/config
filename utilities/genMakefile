@@ -50,7 +50,7 @@ default:
 real: \$(PROG)
 
 \$(PROG): \$(OBJS)
-
+	\$(CC) \$(LFLAGS) \$(OBJS) -o \$(PROG)
 END
 print $makefile $makefileStart;
 
