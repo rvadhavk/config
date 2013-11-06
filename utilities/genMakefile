@@ -1,7 +1,35 @@
 #!/usr/bin/perl
-use strict;
 use warnings;
 
+sub getDependencies {
+	my $file_name = $_[0];
+	my $dependencies;
+	my @emptyArray;
+	if ($_[1]) {
+		$dependencies = $_[1];
+	}
+	else {
+		$dependencies = \@emptyArray;
+	}
+    open(my $fh, "<", $file_name);
+    foreach my $line (<$fh>) {
+        chomp($line);
+        if ($line =~ /#include "(.+)"/) {
+			# handle circular includes
+			if (!($1 ~~ @$dependencies)) {
+				push(@$dependencies, $1);
+				print "before:\n";
+				print @$dependencies;
+				print "\n";
+				&getDependencies($1, $dependencies);
+				print "after:\n";
+				print @$dependencies;
+				print "\n";
+			}
+        }
+    }
+	return @$dependencies;
+}
 my @cppFiles = glob("*.cpp");
 my $numberOfCppFiles = @cppFiles;
 if (!$numberOfCppFiles) {
@@ -14,13 +42,8 @@ foreach (@cppFiles) {
 }
 
 foreach my $cppFile (keys %dependencies) {
-    open(my $fh, "<", $cppFile);
-    foreach my $line (<$fh>) {
-        chomp($line);
-        if ($line =~ /#include "(.+)"/) {
-            push(@{$dependencies{$cppFile}}, $1);
-        }
-    }
+	@{$dependencies{$cppFile}} = &getDependencies($cppFile);
+	print "done\n"
 }
 
 open(my $makefile, ">Makefile");
@@ -51,6 +74,7 @@ real: \$(PROG)
 
 \$(PROG): \$(OBJS)
 	\$(CC) \$(LFLAGS) \$(OBJS) -o \$(PROG)
+
 END
 print $makefile $makefileStart;
 
