@@ -73,4 +73,9 @@ endif
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.c set smartindent cinwords=case,default,if
 hi Comment ctermfg=cyan
+" Colors
+syntax enable
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
 

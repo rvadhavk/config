@@ -3,10 +3,8 @@ script_directory=`dirname "$0"`
 
 #load mybashrc commands for the first time
 echo "Adding . ~/.mybashrc to you ~/.bashrc"
+. $script_directory/.mybashrc
 echo -e "\n#non machine-specific settings\n. ~/.mybashrc" >> ~/.bashrc
-cp $script_directory/.mybashrc ~/.mybashrc
-source ~/.bashrc
-rm ~/.mybashrc
 
 #run setup
 ./$script_directory/setup
@@ -21,5 +19,6 @@ echo "Changing config repo's origin to ssh instead of https"
 cd $script_directory
 git remote rm origin
 git remote add origin git@github.com:rvadhavk/config
+
 
 
