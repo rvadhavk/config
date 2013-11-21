@@ -1,14 +1,7 @@
-#
-# Ryan Morton's bashrc stuff
-# b/c he was sick of fussing with the .bashrc file when upgrading ubuntu
-# Thus name this something like .mybashrc and put the following in your .bashrc
-# if [ -f ~/.mybashrc ]; then
-#     . ~/.mybashrc
-# fi
-
 # SHELL PROMPT
-
 clear
+
+# this part by Ryan Morton
 function parse_git_dirty {
   [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]]
 }
@@ -27,16 +20,13 @@ export PATH=$PATH:.
 export PATH=$PATH:~/config/utilities/
 
 # ALIASES
+alias ls='ls -h --color'
 alias c='clear'
-alias ll='ls -l'
-alias lla='ls -al'
 alias sl='ls'
 alias md=mkdir
 alias rd=rmdir
-alias cls=clear
 alias gitk='gitk --all &'
 alias 'cd..'='cd ..'
-alias gitup='git remote update'
 alias gitst='git status'
 alias gd='git diff --color'
 alias grep="grep -n --color=auto -I"
@@ -44,8 +34,6 @@ alias grep="grep -n --color=auto -I"
 alias m="make"
 alias mc="make clean"
 alias mcm="make clean; make"
-alias aca="ant clean; ant"
-alias c="clear"
 
 #git aliases
 alias gpush='git push origin master'
@@ -58,4 +46,4 @@ alias src='source ~/.bashrc'
 
 shopt -s cdspell
 
-~/config/utilities/synchronize_config 
+( ~/config/utilities/synchronize_config &> /dev/null & )
