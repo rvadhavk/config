@@ -20,7 +20,7 @@ export PS1='\[\033[01;32m\]\u \w\[\033[31m\] $(parse_git_branch)\[\033[01;34m\]$
 
 #PATH
 export PATH=$PATH:.
-export PATH=$PATH:~/config/utilities/
+export PATH=$PATH:~/utilities/
 
 # ALIASES
 alias ls='ls -h --color'
