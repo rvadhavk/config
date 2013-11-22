@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+use warnings;
+
+sub getDependencies {
+	my $file_name = $_[0];
+	my $dependencies;
+	my @emptyArray;
+	if ($_[1]) {
+		$dependencies = $_[1];
+	}
+	else {
+		$dependencies = \@emptyArray;
+	}
+    open(my $fh, "<", $file_name);
+    foreach my $line (<$fh>) {
+        chomp($line);
+        if ($line =~ /#include "(.+)"/) {
+			# handle circular includes
+			if (!($1 ~~ @$dependencies)) {
+				push(@$dependencies, $1);
+				print "before:\n";
+				print @$dependencies;
+				print "\n";
+				&getDependencies($1, $dependencies);
+				print "after:\n";
+				print @$dependencies;
+				print "\n";
+			}
+        }
+    }
+	return @$dependencies;
+}
+my @cppFiles = glob("*.cpp");
+my $numberOfCppFiles = @cppFiles;
+if (!$numberOfCppFiles) {
+	print "Error: no cpp files\n";
+	exit 1;
+}
+my %dependencies = ();
+foreach (@cppFiles) {
+    $dependencies{$_} = ();
+}
+
+foreach my $cppFile (keys %dependencies) {
+	@{$dependencies{$cppFile}} = &getDependencies($cppFile);
+	print "done\n"
+}
+
+open(my $makefile, ">Makefile");
+# generate common makefile stuff    
+my @objectFiles = ();
+
+foreach (@cppFiles) {
+    /(.*)\.cpp/;
+    push(@objectFiles, $1 . ".o");
+}
+my $objectList = join(' ', @objectFiles);
+my $makefileStart = <<END;
+CC = g++
+
+#Recommended compiler and linker flags
+
+CFLAGS = -c -pedantic -std=c++11 -Wall -Werror -Wextra -g
+LFLAGS = -pedantic -Wall -Wextra -Werror 
+OBJS = $objectList
+PROG = exe
+
+#Prevents automatic build rules, which can lead to unexpected behavior.
+
+default:
+	make real -r -R
+
+real: \$(PROG)
+
+\$(PROG): \$(OBJS)
+	\$(CC) \$(LFLAGS) \$(OBJS) -o \$(PROG)
+
+END
+print $makefile $makefileStart;
+
+# add build rule for each object file
+foreach my $cppFile (keys %dependencies) {
+    my @headerFiles = @{$dependencies{$cppFile}};
+    $cppFile =~ /(.*)\.cpp/;
+    my $objectFile = $1. ".o";
+    my $headerFileList = join(" ", @headerFiles);
+    my $buildRule = <<END;
+$objectFile: $cppFile $headerFileList
+\t\$(CC) \$(CFLAGS) $cppFile
+        
+END
+    print $makefile $buildRule;
+}
+
+my $cleanRule = <<END;
+clean:
+\trm -rf exe *.o
+END
+
+print $makefile $cleanRule;
+
+exit 0

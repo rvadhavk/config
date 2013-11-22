@@ -1,0 +1,16 @@
+function dowheneverfilemodified {
+    file_name=$1
+    commands=$2
+    previous_timestamp=$(stat $file_name | grep Modify)
+    echo "$commands"
+    $commands
+    while true; do
+        current_timestamp=$(stat $file_name | grep Modify)
+        if [ "$current_timestamp" != "$previous_timestamp" ]; then
+            $commands
+            previous_timestamp="$current_timestamp"
+        fi
+    done
+}
+
+
