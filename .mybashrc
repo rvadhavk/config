@@ -1,0 +1,53 @@
+# SHELL PROMPT
+clear
+
+# this part by Ryan Morton
+function parse_git_dirty {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]]
+}
+function parse_git_branch {
+  if [ $(git rev-parse --show-toplevel) != ~ ]; then
+    git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+  fi
+}
+function parse_git_branch_original {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1$(parse_git_dirty)]/"
+}
+
+#export PS1='\[\033[01;32m\]\u@\h\[\033[01;34m\] \w\[\033[31m\] $(parse_git_branch)\[\033[01;34m\]$\[\033[00m\]\n'
+
+export PS1='\[\033[01;32m\]\u \w\[\033[31m\] $(parse_git_branch)\[\033[01;34m\]$\[\033[00m\] '
+
+#PATH
+export PATH=$PATH:.
+export PATH=$PATH:~/config/utilities/
+
+# ALIASES
+alias ls='ls -h --color'
+alias c='clear'
+alias sl='ls'
+alias md=mkdir
+alias rd=rmdir
+alias gitk='gitk --all &'
+alias 'cd..'='cd ..'
+alias gitst='git status'
+alias gd='git diff --color'
+alias grep="grep -n --color=auto -I"
+
+alias m="make"
+alias mc="make clean"
+alias mcm="make clean; make"
+
+#git aliases
+alias gpush='git push origin master'
+alias gpull='git pull origin master'
+alias gc='git commit -am'
+
+#utility aliases
+alias src='source ~/.bashrc'
+
+
+shopt -s cdspell
+
+( ~/config/utilities/synchronize_config &> /dev/null & )
+( ~/config/utilities/synchronize_vim_config
