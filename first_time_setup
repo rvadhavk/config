@@ -3,10 +3,10 @@ script_directory=`dirname "$0"`
 
 #load mybashrc commands for the first time
 echo "Adding . ~/.mybashrc to you ~/.bashrc"
-. $script_directory/.mybashrc
 echo -e "\n#non machine-specific settings\n. ~/.mybashrc" >> ~/.bashrc
 
 #run setup
+. $script_directory/.mybashrc
 ./$script_directory/setup
 
 #create github keygen if there isn't one

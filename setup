@@ -1,8 +1,13 @@
 #!/bin/bash
 #all dotfiles that go in ~
 script_directory=`dirname "$0"`
+
 for dotfile in $script_directory/.*; do
-    if [ -f $dotfile ]; then
+    $dotfile_home_path="~/$(basename $dotfile)"
+    if [ $1 -eq "-f" ]; then
+        rm -f $dotfile_home_path 
+    fi
+    if [ -f $dotfile -a (!( -f ~/$(basename $dotfile) ) ]; then
         symlink $dotfile ~/$(basename $dotfile)
     fi
 done
